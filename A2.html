@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Ottawa Stolen Bicycles</title>
+<meta charset='utf-8' />
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<script src='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v2.1.1/mapbox-gl.css' rel='stylesheet' />
+<script src="https://unpkg.com/intersection-observer@0.5.1/intersection-observer.js"></script>
+<script src="https://unpkg.com/scrollama"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sheetrock/1.1.4/dist/sheetrock.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Garamond, Helvetica, sans-serif, Trebuchet;
+  margin: 0;
+}
+
+.header {
+  padding: 80px;
+  text-align: center;
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/f/f1/Ottawa_Skyline_June_2019.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+
+  color: #FFFAFA;
+  font: Trebuchet;
+}
+
+.navbar a {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 20px;
+  text-decoration: none;
+}
+
+/* Change color on hover */
+.navbar a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.row {
+  background-image: url('https://upload.wikimedia.org/wikipedia/commons/f/f1/Ottawa_Skyline_June_2019.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.footer {
+  padding: 40px;
+  text-align: center;
+  color: #FFFAFA;
+}
+
+.center {
+  margin: 0;
+  position: absolute;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.button {
+  background-color: #89CFF0;
+  border: none;
+  color: white;
+  padding: 20px 34px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 20px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.button:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.mapboxgl-popup {
+  max-width: 200px;
+}
+
+.mapboxgl-popup-content {
+  text-align: center;
+  font-family: 'Open Sans', sans-serif;
+}
+
+</style>
+</head>
+<body>
+
+  <table class= "holdable">
+</table>
+
+<div class="header">
+  <h1>Stolen Bicycles in Ottawa</h1>
+  <p>Report a stolen bicycle or browse our map for past occurances.</p>
+</div>
+
+<div class="navbar">
+  <a href="https://open.ottawa.ca/datasets/3620cc7a3b874557bb288d889a4d56c2_0?geometry=-77.114%2C45.177%2C-74.501%2C45.515">Bicycle Thefts Open Ottawa</a>
+  <a href="https://www.ottawapolice.ca/en/safety-and-crime-prevention/529-garage.aspx">Ottawa Police 529 Garage</a>
+
+</div>
+
+  <div class="center">
+    <a class="button" href="https://forms.gle/RYXuCyDEkkiNDzc18">Report a Stolen Bicycle</a>
+
+  </div>
+</div>
+
+<div class="row">
+
+    <div </div>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+  <div id="map" style='width: 1900px; height: 900px; margin-left:auto; ' ></div>
+
+  <script>
+  mapboxgl.accessToken = 'pk.eyJ1Ijoib2xpb2xpcG9wIiwiYSI6ImNra2hrNmhpNTAycHcyd213dDl4ZGQ3ajQifQ.YHtRrD3Wowr8flrjm-w3EQ'
+
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/oliolipop/ckm6tdq112ebj17mpb8x3ta1v',
+        center: [-75.699177, 45.414248],
+        zoom: 12,
+        bearing: 0,
+        pitch: 30,
+        scrollZoom: true,
+    });
+
+    var mySpreadsheet = 'https://docs.google.com/spreadsheets/d/1JA3ErvDQ8Zn0k8srpjS6NdjXEYjMfTLCC_DdFnFGZ0U/edit#gid=2126597525';
+
+    sheetrock({
+      url: mySpreadsheet,
+      callback: draw
+    });
+
+
+    function draw(error, options, response){
+      data=response.rows;
+      console.log(response);
+      for(i in data){
+        if(i>1){
+          console.log(data[i].cellsArray[1])
+          lat=data[i].cellsArray[13];
+          lon=data[i].cellsArray[14];
+
+    var marker = new mapboxgl.Marker()
+    .setLngLat([lon, lat])
+    .setPopup(new mapboxgl.Popup().setHTML("Information about this bike: " + data[i].cellsArray[7] + "<p>Time of theft: " + data[i].cellsArray[5] +"<p>Date of theft: " + data[i].cellsArray[6]))
+    .addTo(map);
+
+    }
+  }
+};
+
+  </script>
+
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="footer">
+  <h2>GEOM 4001 Assignment Two</h2>
+</div>
+
+</body>
+</html>
